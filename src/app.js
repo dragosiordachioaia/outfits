@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 
-import DummyContainer from 'containers/dummyContainer';
+import ElementList from 'containers/elementList';
 import ElementDetails from 'containers/elementDetails';
 
 class App extends Component {
@@ -10,7 +10,7 @@ class App extends Component {
       <BrowserRouter>
         <div>
           <div className="main-content">
-            <Route exact path="/" component={DummyContainer} />
+            <Route exact path="/" component={ElementList} />
             <Route exact path="/element/:id" component={ElementDetails} />
           </div>
         </div>

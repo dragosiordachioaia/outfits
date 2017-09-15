@@ -16,7 +16,7 @@ class ElementDetails extends Component {
         <Link to="/">
           Go to Home Page
         </Link>
-        <h1> These are the details for {activeElement.name} {activeElement.id}</h1>
+        <h1> These are the details for {activeElement.name}</h1>
       </div>
     );
   }
