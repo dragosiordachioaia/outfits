@@ -7,7 +7,9 @@ import * as actions from '../actions/actions';
 class ElementList extends Component {
   constructor() {
     super();
+    this.state = {elemName: ""};
     this.onButtonClick = this.onButtonClick.bind(this);
+    this.submitNewElement = this.submitNewElement.bind(this);
   }
 
   componentDidMount() {
@@ -23,12 +25,23 @@ class ElementList extends Component {
   }
 
   onButtonClick() {
-    this.props.addElement();
+    this.props.addElement(this.state.elemName);
+  }
+
+  submitNewElement(event) {
+    event.preventDefault();
   }
 
   render() {
     return (
       <div>
+        <form onSubmit={this.submitNewElement}>
+          <input
+            value={this.state.elemName}
+            onChange={e => this.setState({elemName: e.target.value})}
+            placeholder="Element name here"
+          />
+        </form>
         <button onClick={this.onButtonClick}>Add element</button>
         {this.displayElemList(this.props.elements)}
       </div>

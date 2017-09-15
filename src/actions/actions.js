@@ -4,10 +4,8 @@ import axios from 'axios';
 
 const BASE_URL = 'http://127.0.0.1:5000';
 
-export function addElement(post) {
-  const promise = axios.post(`${BASE_URL}/element`, {
-    name: "third element",
-  });
+export function addElement(name) {
+  const promise = axios.post(`${BASE_URL}/element`, {name});
   return {
     type: actions.ADD_ELEMENT,
     payload: promise,

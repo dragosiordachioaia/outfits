@@ -24882,6 +24882,11 @@ function ElementsReducer() {
 
   switch (action.type) {
     case actions.ADD_ELEMENT:
+      console.log('ADD_ELEMENT response = ', action);
+      if (action.error) {
+        alert('Sorry, an error has occured');
+        return state;
+      }
       return state.concat(action.payload.data);
     case actions.GET_ALL_ELEMENTS:
       console.log('GET_ALL_ELEMENTS action received, action = ', action);
@@ -28899,10 +28904,8 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 var BASE_URL = 'http://127.0.0.1:5000';
 
-function addElement(post) {
-  var promise = _axios2.default.post(BASE_URL + '/element', {
-    name: "third element"
-  });
+function addElement(name) {
+  var promise = _axios2.default.post(BASE_URL + '/element', { name: name });
   return {
     type: actions.ADD_ELEMENT,
     payload: promise
@@ -31390,7 +31393,9 @@ var ElementList = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (ElementList.__proto__ || Object.getPrototypeOf(ElementList)).call(this));
 
+    _this.state = { elemName: "" };
     _this.onButtonClick = _this.onButtonClick.bind(_this);
+    _this.submitNewElement = _this.submitNewElement.bind(_this);
     return _this;
   }
 
@@ -31417,14 +31422,32 @@ var ElementList = function (_Component) {
   }, {
     key: 'onButtonClick',
     value: function onButtonClick() {
-      this.props.addElement();
+      this.props.addElement(this.state.elemName);
+    }
+  }, {
+    key: 'submitNewElement',
+    value: function submitNewElement(event) {
+      event.preventDefault();
     }
   }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       return _react2.default.createElement(
         'div',
         null,
+        _react2.default.createElement(
+          'form',
+          { onSubmit: this.submitNewElement },
+          _react2.default.createElement('input', {
+            value: this.state.elemName,
+            onChange: function onChange(e) {
+              return _this2.setState({ elemName: e.target.value });
+            },
+            placeholder: 'Element name here'
+          })
+        ),
         _react2.default.createElement(
           'button',
           { onClick: this.onButtonClick },
