@@ -1,12 +1,22 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Route } from 'react-router-dom';
 
-export default class App extends Component {
+import DummyContainer from 'containers/dummyContainer';
+import ElementDetails from 'containers/elementDetails';
+
+class App extends Component {
   render() {
     return (
-      <div>
-        <h1>Hello World!</h1>
-        <h3>This is a React App updates!</h3>
-      </div>
+      <BrowserRouter>
+        <div>
+          <div className="main-content">
+            <Route exact path="/" component={DummyContainer} />
+            <Route exact path="/element/:id" component={ElementDetails} />
+          </div>
+        </div>
+      </BrowserRouter>
     );
   }
 }
+
+export default App;
