@@ -11,6 +11,7 @@ pip install -r requirements.txt
 
 # we need the FLASK_APP environment variable in order to be able to run the application
 export FLASK_APP='app.py'
+export FLASK_DEBUG=1
 
 # install the front-end dependencies, as listed in package.json and yarn.lock
 yarn install
