@@ -28902,7 +28902,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-var BASE_URL = 'http://127.0.0.1:5000';
+// const BASE_URL = 'http://127.0.0.1:5000';
+var BASE_URL = '';
 
 function addElement(name) {
   var promise = _axios2.default.post(BASE_URL + '/element', { name: name });
