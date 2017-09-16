@@ -14,5 +14,13 @@ export default function AuthReducer(state = [], action) {
         type: action.payload.data.type,
       };
       return state.concat(newImage);
+    case actions.GET_IMAGES:
+      if(action.error) {
+        alert('Sorry, an error has occured');
+        return state;
+      }
+      return state.concat(action.payload.data);
+    default:
+      return state;
   }
 }

@@ -42,11 +42,21 @@ export function logOut(data) {
     type: actions.LOG_OUT,
   }
 }
+
 export function addImage(data) {
   const promise = axios.post(`${BASE_URL}/image`, data);
 
   return {
     type: actions.ADD_IMAGE,
+    payload: promise,
+  }
+}
+
+export function getImages() {
+  const promise = axios.get(`${BASE_URL}/images`);
+
+  return {
+    type: actions.GET_IMAGES,
     payload: promise,
   }
 }

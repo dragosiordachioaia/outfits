@@ -12612,6 +12612,7 @@ var REGISTER_USER = exports.REGISTER_USER = 'REGISTER_USER';
 var LOGIN_USER = exports.LOGIN_USER = 'LOGIN_USER';
 var LOG_OUT = exports.LOG_OUT = 'LOG_OUT';
 var ADD_IMAGE = exports.ADD_IMAGE = 'ADD_IMAGE';
+var GET_IMAGES = exports.GET_IMAGES = 'GET_IMAGES';
 
 /***/ }),
 /* 113 */
@@ -13383,6 +13384,7 @@ exports.registerUser = registerUser;
 exports.loginUser = loginUser;
 exports.logOut = logOut;
 exports.addImage = addImage;
+exports.getImages = getImages;
 
 var _actionTypes = __webpack_require__(112);
 
@@ -13436,11 +13438,21 @@ function logOut(data) {
     type: actions.LOG_OUT
   };
 }
+
 function addImage(data) {
   var promise = _axios2.default.post(BASE_URL + '/image', data);
 
   return {
     type: actions.ADD_IMAGE,
+    payload: promise
+  };
+}
+
+function getImages() {
+  var promise = _axios2.default.get(BASE_URL + '/images');
+
+  return {
+    type: actions.GET_IMAGES,
     payload: promise
   };
 }
@@ -27107,11 +27119,16 @@ var _authReducer = __webpack_require__(309);
 
 var _authReducer2 = _interopRequireDefault(_authReducer);
 
+var _imagesReducer = __webpack_require__(315);
+
+var _imagesReducer2 = _interopRequireDefault(_imagesReducer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var rootReducer = (0, _redux.combineReducers)({
   elements: _elementsReducer2.default,
-  auth: _authReducer2.default
+  auth: _authReducer2.default,
+  images: _imagesReducer2.default
 });
 
 exports.default = rootReducer;
@@ -31930,12 +31947,21 @@ var Create = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (Create.__proto__ || Object.getPrototypeOf(Create)).call(this));
 
-    _this.state = { username: "", password: "" };
+    _this.state = { topIndex: 0, bottomIndex: 0, shoesIndex: 0 };
     _this.submitForm = _this.submitForm.bind(_this);
+    _this.prevTop = _this.prevTop.bind(_this);
+    _this.nextTop = _this.nextTop.bind(_this);
     return _this;
   }
 
   _createClass(Create, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      if (this.props.images.length === 0) {
+        this.props.getImages();
+      }
+    }
+  }, {
     key: 'submitForm',
     value: function submitForm(event) {
       event.preventDefault();
@@ -31945,8 +31971,25 @@ var Create = function (_Component) {
       });
     }
   }, {
+    key: 'prevTop',
+    value: function prevTop() {
+      this.setState({ topIndex: this.state.topIndex - 1 });
+    }
+  }, {
+    key: 'nextTop',
+    value: function nextTop() {
+      this.setState({ topIndex: this.state.topIndex + 1 });
+    }
+  }, {
     key: 'render',
     value: function render() {
+      if (this.props.images.length === 0) {
+        return _react2.default.createElement(
+          'p',
+          null,
+          'Loading...'
+        );
+      }
       return _react2.default.createElement(
         'div',
         null,
@@ -31956,9 +31999,12 @@ var Create = function (_Component) {
           'Create outfit'
         ),
         _react2.default.createElement(_picker2.default, {
-          onPrev: function onPrev() {},
-          onNext: function onNext() {},
-          imageSource: 'https://i.pinimg.com/736x/d9/cf/f3/d9cff313be8e969d0238788590c6b838--red-blouses-chiffon-blouses.jpg' })
+          onPrev: this.prevTop,
+          onNext: this.nextTop,
+          imageSource: this.props.images[this.state.topIndex].src,
+          crtIndex: this.state.topIndex,
+          limit: this.props.images.length
+        })
       );
     }
   }]);
@@ -31968,13 +32014,13 @@ var Create = function (_Component) {
 
 function mapStateToProps(state) {
   return {
-    elements: state.elements
+    images: state.images
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return (0, _redux.bindActionCreators)({
-    registerUser: actions.registerUser
+    getImages: actions.getImages
   }, dispatch);
 }
 
@@ -32226,24 +32272,32 @@ var Picker = function (_Component) {
   _createClass(Picker, [{
     key: "render",
     value: function render() {
-      return _react2.default.createElement(
-        "div",
-        null,
-        _react2.default.createElement(
+      var btnPrev = void 0;
+      var btnNext = void 0;
+      if (this.props.crtIndex > 0) {
+        btnPrev = _react2.default.createElement(
           "button",
           { onClick: this.props.onPrev },
           " ",
           "<",
           " "
-        ),
-        _react2.default.createElement("img", { src: this.props.imageSource }),
-        _react2.default.createElement(
+        );
+      }
+      if (this.props.crtIndex < this.props.limit - 1) {
+        btnNext = _react2.default.createElement(
           "button",
           { onClick: this.props.onNext },
           " ",
           ">",
           " "
-        )
+        );
+      }
+      return _react2.default.createElement(
+        "div",
+        null,
+        btnPrev,
+        _react2.default.createElement("img", { src: this.props.imageSource }),
+        btnNext
       );
     }
   }]);
@@ -32252,6 +32306,52 @@ var Picker = function (_Component) {
 }(_react.Component);
 
 exports.default = Picker;
+
+/***/ }),
+/* 315 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = AuthReducer;
+
+var _actionTypes = __webpack_require__(112);
+
+var actions = _interopRequireWildcard(_actionTypes);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function AuthReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var action = arguments[1];
+
+  var newState = void 0;
+
+  switch (action.type) {
+    case actions.ADD_IMAGE:
+      if (action.error) {
+        alert('Sorry, an error has occured');
+        return state;
+      }
+      var newImage = {
+        src: action.payload.data.src,
+        type: action.payload.data.type
+      };
+      return state.concat(newImage);
+    case actions.GET_IMAGES:
+      if (action.error) {
+        alert('Sorry, an error has occured');
+        return state;
+      }
+      return state.concat(action.payload.data);
+    default:
+      return state;
+  }
+}
 
 /***/ })
 /******/ ]);
