@@ -15,12 +15,7 @@ CORS(app)
 # Check Configuring Flask-Caching section for more details
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
-@app.route('/')
-@cache.cached(timeout=3600)
-def home():
-    return render_template('index.html')
-
-@app.route('/register', methods=['POST'])
+@app.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json()
     if not data.get('username'):
@@ -35,7 +30,7 @@ def register():
     users.insert(new_user)
     return jsonify({"message": "User Added"})
 
-@app.route('/login', methods=['POST'])
+@app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()
     if not data.get('username'):
@@ -52,22 +47,35 @@ def login():
 
     if valid_user:
         encoded_token = jwt.encode({"some": "payload"}, secret, algorithm='HS256')
-        return jsonify({"token": encoded_token.decode('utf-8')})
+        return jsonify({
+            "token": encoded_token.decode('utf-8'),
+            "username": data['username'],
+        })
     return jsonify({"error": "Username and/or password incorrect"}), 404
 
-@app.route('/users')
+@app.route('/api/users')
 def list_users():
     return jsonify({"users": users.all()})
 
-@app.route('/elements')
+@app.route('/api/elements')
 # @cache.cached(timeout=10)
 def get_all_elements():
     return jsonify(elements.all())
 
-@app.route('/element', methods=['POST'])
+@app.route('/api/element', methods=['POST'])
 def add_element():
     next_index = len(elements) + 1
     data = request.get_json()
     data['id'] = next_index
     elements.insert(data)
     return jsonify(data)
+
+@app.route('/')
+@cache.cached(timeout=3600)
+def home():
+    return render_template('index.html')
+
+@app.route("/<path:path>")
+@cache.cached(timeout=3600)
+def serve_home(path):
+    return render_template('index.html')
