@@ -42,3 +42,11 @@ export function logOut(data) {
     type: actions.LOG_OUT,
   }
 }
+export function addImage(data) {
+  const promise = axios.post(`${BASE_URL}/image`, data);
+
+  return {
+    type: actions.ADD_IMAGE,
+    payload: promise,
+  }
+}

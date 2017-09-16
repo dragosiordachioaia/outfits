@@ -8,6 +8,7 @@ import jwt
 app = Flask(__name__)
 db = TinyDB('db.json')
 elements = db.table('elements')
+images = db.table('images')
 users = db.table('users')
 secret = 'secret'
 
@@ -69,6 +70,19 @@ def add_element():
     data['id'] = next_index
     elements.insert(data)
     return jsonify(data)
+
+@app.route('/api/image', methods=['POST'])
+def add_image():
+    data = request.get_json()
+    next_index = len(images) + 1
+    data['id'] = next_index
+    images.insert(data)
+    return jsonify(data)
+
+@app.route('/api/images')
+def get_images():
+    return jsonify(images.all())
+
 
 @app.route('/')
 @cache.cached(timeout=3600)

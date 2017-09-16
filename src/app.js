@@ -5,6 +5,9 @@ import Home from 'containers/home';
 import ElementDetails from 'containers/elementDetails';
 import RegisterUser from 'containers/registerUser';
 import LoginUser from 'containers/loginUser';
+import Create from 'containers/create';
+import Browse from 'containers/browse';
+import Upload from 'containers/upload';
 
 
 class App extends Component {
@@ -17,6 +20,9 @@ class App extends Component {
             <Route exact path="/element/:id" component={ElementDetails} />
             <Route exact path="/register" component={RegisterUser} />
             <Route exact path="/login" component={LoginUser} />
+            <Route exact path="/create" component={Create} />
+            <Route exact path="/browse" component={Browse} />
+            <Route exact path="/upload" component={Upload} />
           </div>
         </div>
       </BrowserRouter>
