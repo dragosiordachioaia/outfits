@@ -27718,9 +27718,9 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRouterDom = __webpack_require__(62);
 
-var _elementList = __webpack_require__(286);
+var _home = __webpack_require__(310);
 
-var _elementList2 = _interopRequireDefault(_elementList);
+var _home2 = _interopRequireDefault(_home);
 
 var _elementDetails = __webpack_require__(306);
 
@@ -27763,7 +27763,7 @@ var App = function (_Component) {
           _react2.default.createElement(
             'div',
             { className: 'main-content' },
-            _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _elementList2.default }),
+            _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _home2.default }),
             _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/element/:id', component: _elementDetails2.default }),
             _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/register', component: _registerUser2.default }),
             _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/login', component: _loginUser2.default })
@@ -30432,192 +30432,7 @@ var withRouter = function withRouter(Component) {
 /* harmony default export */ __webpack_exports__["a"] = (withRouter);
 
 /***/ }),
-/* 286 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(6);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRedux = __webpack_require__(59);
-
-var _reactRouterDom = __webpack_require__(62);
-
-var _redux = __webpack_require__(39);
-
-var _actions = __webpack_require__(121);
-
-var actions = _interopRequireWildcard(_actions);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var ElementList = function (_Component) {
-  _inherits(ElementList, _Component);
-
-  function ElementList() {
-    _classCallCheck(this, ElementList);
-
-    var _this = _possibleConstructorReturn(this, (ElementList.__proto__ || Object.getPrototypeOf(ElementList)).call(this));
-
-    _this.state = { elemName: "" };
-    _this.onButtonClick = _this.onButtonClick.bind(_this);
-    _this.submitNewElement = _this.submitNewElement.bind(_this);
-    _this.logOut = _this.logOut.bind(_this);
-    return _this;
-  }
-
-  _createClass(ElementList, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      if (this.props.elements.length === 0) {
-        this.props.getAllElements();
-      }
-    }
-  }, {
-    key: 'displayElemList',
-    value: function displayElemList(elements) {
-      return elements.map(function (element) {
-        return _react2.default.createElement(
-          _reactRouterDom.Link,
-          { key: element.id, to: '/element/' + element.id },
-          _react2.default.createElement(
-            'p',
-            null,
-            element.name
-          )
-        );
-      });
-    }
-  }, {
-    key: 'onButtonClick',
-    value: function onButtonClick() {
-      this.props.addElement(this.state.elemName);
-    }
-  }, {
-    key: 'submitNewElement',
-    value: function submitNewElement(event) {
-      event.preventDefault();
-    }
-  }, {
-    key: 'logOut',
-    value: function logOut() {
-      this.props.logOut();
-    }
-  }, {
-    key: 'displayLoginButton',
-    value: function displayLoginButton(auth) {
-      var result = void 0;
-      if (auth.token) {
-        result = _react2.default.createElement(
-          'div',
-          null,
-          _react2.default.createElement(
-            'p',
-            null,
-            'Hello ',
-            this.props.auth.username,
-            '!'
-          ),
-          _react2.default.createElement(
-            'button',
-            { onClick: this.logOut },
-            'Log out'
-          )
-        );
-      } else {
-        result = _react2.default.createElement(
-          'div',
-          null,
-          _react2.default.createElement(
-            _reactRouterDom.Link,
-            { to: '/login' },
-            _react2.default.createElement(
-              'button',
-              null,
-              'Login'
-            )
-          ),
-          _react2.default.createElement(
-            _reactRouterDom.Link,
-            { to: '/register' },
-            _react2.default.createElement(
-              'button',
-              null,
-              'Register'
-            )
-          )
-        );
-      }
-      return result;
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var _this2 = this;
-
-      return _react2.default.createElement(
-        'div',
-        null,
-        this.displayLoginButton(this.props.auth),
-        _react2.default.createElement(
-          'form',
-          { onSubmit: this.submitNewElement },
-          _react2.default.createElement('input', {
-            value: this.state.elemName,
-            onChange: function onChange(e) {
-              return _this2.setState({ elemName: e.target.value });
-            },
-            placeholder: 'Element name here'
-          })
-        ),
-        _react2.default.createElement(
-          'button',
-          { onClick: this.onButtonClick },
-          'Add element'
-        ),
-        this.displayElemList(this.props.elements)
-      );
-    }
-  }]);
-
-  return ElementList;
-}(_react.Component);
-
-function mapStateToProps(state) {
-  return {
-    elements: state.elements,
-    auth: state.auth
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return (0, _redux.bindActionCreators)({
-    addElement: actions.addElement,
-    getAllElements: actions.getAllElements,
-    logOut: actions.logOut
-  }, dispatch);
-}
-
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ElementList);
-
-/***/ }),
+/* 286 */,
 /* 287 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -31870,6 +31685,145 @@ function AuthReducer() {
       return state;
   }
 }
+
+/***/ }),
+/* 310 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(59);
+
+var _reactRouterDom = __webpack_require__(62);
+
+var _redux = __webpack_require__(39);
+
+var _actions = __webpack_require__(121);
+
+var actions = _interopRequireWildcard(_actions);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Home = function (_Component) {
+  _inherits(Home, _Component);
+
+  function Home() {
+    _classCallCheck(this, Home);
+
+    var _this = _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).call(this));
+
+    _this.logOut = _this.logOut.bind(_this);
+    return _this;
+  }
+
+  _createClass(Home, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      if (this.props.elements.length === 0) {
+        this.props.getAllElements();
+      }
+    }
+  }, {
+    key: 'logOut',
+    value: function logOut() {
+      this.props.logOut();
+    }
+  }, {
+    key: 'displayLoginButton',
+    value: function displayLoginButton(auth) {
+      var result = void 0;
+      if (auth.token) {
+        result = _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(
+            'p',
+            null,
+            'Hello ',
+            this.props.auth.username,
+            '!'
+          ),
+          _react2.default.createElement(
+            'button',
+            { onClick: this.logOut },
+            'Log out'
+          )
+        );
+      } else {
+        result = _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(
+            _reactRouterDom.Link,
+            { to: '/login' },
+            _react2.default.createElement(
+              'button',
+              null,
+              'Login'
+            )
+          ),
+          _react2.default.createElement(
+            _reactRouterDom.Link,
+            { to: '/register' },
+            _react2.default.createElement(
+              'button',
+              null,
+              'Register'
+            )
+          )
+        );
+      }
+      return result;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        'div',
+        null,
+        this.displayLoginButton(this.props.auth)
+      );
+    }
+  }]);
+
+  return Home;
+}(_react.Component);
+
+function mapStateToProps(state) {
+  return {
+    elements: state.elements,
+    auth: state.auth
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return (0, _redux.bindActionCreators)({
+    addElement: actions.addElement,
+    getAllElements: actions.getAllElements,
+    logOut: actions.logOut
+  }, dispatch);
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Home);
 
 /***/ })
 /******/ ]);

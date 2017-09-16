@@ -4,12 +4,9 @@ import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import * as actions from '../actions/actions';
 
-class ElementList extends Component {
+class Home extends Component {
   constructor() {
     super();
-    this.state = {elemName: ""};
-    this.onButtonClick = this.onButtonClick.bind(this);
-    this.submitNewElement = this.submitNewElement.bind(this);
     this.logOut = this.logOut.bind(this);
   }
 
@@ -17,22 +14,6 @@ class ElementList extends Component {
     if(this.props.elements.length === 0) {
       this.props.getAllElements();
     }
-  }
-
-  displayElemList(elements) {
-    return elements.map(element => (
-      <Link key={element.id} to={`/element/${element.id}`}>
-        <p>{element.name}</p>
-      </Link>
-    ));
-  }
-
-  onButtonClick() {
-    this.props.addElement(this.state.elemName);
-  }
-
-  submitNewElement(event) {
-    event.preventDefault();
   }
 
   logOut() {
@@ -67,15 +48,6 @@ class ElementList extends Component {
     return (
       <div>
         {this.displayLoginButton(this.props.auth)}
-        <form onSubmit={this.submitNewElement}>
-          <input
-            value={this.state.elemName}
-            onChange={e => this.setState({elemName: e.target.value})}
-            placeholder="Element name here"
-          />
-        </form>
-        <button onClick={this.onButtonClick}>Add element</button>
-        {this.displayElemList(this.props.elements)}
       </div>
     );
   }
@@ -96,4 +68,4 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ElementList);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
