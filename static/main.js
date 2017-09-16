@@ -31766,6 +31766,37 @@ var Home = function (_Component) {
             'button',
             { onClick: this.logOut },
             'Log out'
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              _reactRouterDom.Link,
+              { to: '/create' },
+              _react2.default.createElement(
+                'button',
+                null,
+                'Create new outfit'
+              )
+            ),
+            _react2.default.createElement(
+              _reactRouterDom.Link,
+              { to: '/browse' },
+              _react2.default.createElement(
+                'button',
+                null,
+                'Browse outfits'
+              )
+            ),
+            _react2.default.createElement(
+              _reactRouterDom.Link,
+              { to: '/upload' },
+              _react2.default.createElement(
+                'button',
+                null,
+                'Add images'
+              )
+            )
           )
         );
       } else {

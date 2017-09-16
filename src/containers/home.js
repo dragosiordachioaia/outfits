@@ -20,6 +20,8 @@ class Home extends Component {
     this.props.logOut();
   }
 
+
+
   displayLoginButton(auth) {
     let result;
     if(auth.token) {
@@ -27,6 +29,17 @@ class Home extends Component {
         <div>
           <p>Hello {this.props.auth.username}!</p>
           <button onClick={this.logOut}>Log out</button>
+          <div>
+            <Link to="/create">
+              <button>Create new outfit</button>
+            </Link>
+            <Link to="/browse">
+              <button>Browse outfits</button>
+            </Link>
+            <Link to="/upload">
+              <button>Add images</button>
+            </Link>
+          </div>
         </div>
       );
     } else {
