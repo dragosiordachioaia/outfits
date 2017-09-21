@@ -37,6 +37,13 @@ export function loginUser(data) {
   }
 }
 
+export function markAsLoggedIn(data) {
+  return {
+    type: actions.MARK_AS_LOGGED_IN,
+    payload: data,
+  }
+}
+
 export function logOut(data) {
   return {
     type: actions.LOG_OUT,

@@ -12610,6 +12610,7 @@ var ADD_ELEMENT = exports.ADD_ELEMENT = 'ADD_ELEMENT';
 var GET_ALL_ELEMENTS = exports.GET_ALL_ELEMENTS = 'GET_ALL_ELEMENTS';
 var REGISTER_USER = exports.REGISTER_USER = 'REGISTER_USER';
 var LOGIN_USER = exports.LOGIN_USER = 'LOGIN_USER';
+var MARK_AS_LOGGED_IN = exports.MARK_AS_LOGGED_IN = 'MARK_AS_LOGGED_IN';
 var LOG_OUT = exports.LOG_OUT = 'LOG_OUT';
 var ADD_IMAGE = exports.ADD_IMAGE = 'ADD_IMAGE';
 var GET_IMAGES = exports.GET_IMAGES = 'GET_IMAGES';
@@ -13382,6 +13383,7 @@ exports.addElement = addElement;
 exports.getAllElements = getAllElements;
 exports.registerUser = registerUser;
 exports.loginUser = loginUser;
+exports.markAsLoggedIn = markAsLoggedIn;
 exports.logOut = logOut;
 exports.addImage = addImage;
 exports.getImages = getImages;
@@ -13430,6 +13432,13 @@ function loginUser(data) {
   return {
     type: actions.LOGIN_USER,
     payload: promise
+  };
+}
+
+function markAsLoggedIn(data) {
+  return {
+    type: actions.MARK_AS_LOGGED_IN,
+    payload: data
   };
 }
 
@@ -31692,6 +31701,12 @@ var _actionTypes = __webpack_require__(112);
 
 var actions = _interopRequireWildcard(_actionTypes);
 
+var _universalCookie = __webpack_require__(316);
+
+var _universalCookie2 = _interopRequireDefault(_universalCookie);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function AuthReducer() {
@@ -31699,6 +31714,7 @@ function AuthReducer() {
   var action = arguments[1];
 
   var newState = void 0;
+  var cookies = void 0;
 
   switch (action.type) {
     case actions.REGISTER_USER:
@@ -31714,14 +31730,30 @@ function AuthReducer() {
         alert('Sorry, an error has occured');
         return state;
       }
+
+      cookies = new _universalCookie2.default();
       newState = Object.assign({}, state);
+
       newState.token = action.payload.data.token;
       newState.username = action.payload.data.username;
+
+      cookies.set('token', newState.token);
+      cookies.set('username', newState.username);
+
       return newState;
     case actions.LOG_OUT:
+      cookies = new _universalCookie2.default();
       newState = Object.assign({}, state);
       newState.token = null;
       newState.username = null;
+      cookies.remove('token');
+      cookies.remove('username');
+
+      return newState;
+    case actions.MARK_AS_LOGGED_IN:
+      newState = Object.assign({}, state);
+      newState.token = action.payload.token;
+      newState.username = action.payload.username;
       return newState;
     default:
       return state;
@@ -31750,6 +31782,10 @@ var _reactRedux = __webpack_require__(59);
 var _reactRouterDom = __webpack_require__(62);
 
 var _redux = __webpack_require__(39);
+
+var _universalCookie = __webpack_require__(316);
+
+var _universalCookie2 = _interopRequireDefault(_universalCookie);
 
 var _actions = __webpack_require__(121);
 
@@ -31782,6 +31818,14 @@ var Home = function (_Component) {
     value: function componentDidMount() {
       if (this.props.elements.length === 0) {
         this.props.getAllElements();
+      }
+
+      var cookies = new _universalCookie2.default();
+      if (cookies.get('token')) {
+        this.props.markAsLoggedIn({
+          token: cookies.get('token'),
+          username: cookies.get('username')
+        });
       }
     }
   }, {
@@ -31892,6 +31936,7 @@ function mapDispatchToProps(dispatch) {
   return (0, _redux.bindActionCreators)({
     addElement: actions.addElement,
     getAllElements: actions.getAllElements,
+    markAsLoggedIn: actions.markAsLoggedIn,
     logOut: actions.logOut
   }, dispatch);
 }
@@ -32351,6 +32396,399 @@ function AuthReducer() {
     default:
       return state;
   }
+}
+
+/***/ }),
+/* 316 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Cookies = __webpack_require__(319);
+
+var _Cookies2 = _interopRequireDefault(_Cookies);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _Cookies2.default;
+module.exports = exports['default'];
+
+/***/ }),
+/* 317 */,
+/* 318 */,
+/* 319 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _cookie = __webpack_require__(320);
+
+var _cookie2 = _interopRequireDefault(_cookie);
+
+var _objectAssign = __webpack_require__(4);
+
+var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+var _utils = __webpack_require__(321);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Cookies = function () {
+  function Cookies(cookies, hooks) {
+    _classCallCheck(this, Cookies);
+
+    if (typeof cookies === 'string') {
+      this.cookies = _cookie2.default.parse(cookies);
+    } else if ((typeof cookies === 'undefined' ? 'undefined' : _typeof(cookies)) === 'object') {
+      this.cookies = cookies;
+    } else {
+      this.cookies = {};
+    }
+
+    this.hooks = hooks;
+  }
+
+  _createClass(Cookies, [{
+    key: '_updateBrowserValues',
+    value: function _updateBrowserValues() {
+      if (!_utils.HAS_DOCUMENT_COOKIE) {
+        return;
+      }
+
+      var newCookies = _cookie2.default.parse(document.cookie);
+
+      // Make sure we keep the other cookies
+      // In test, sometimes we have an empty document.cookie
+      for (var name in newCookies) {
+        this.cookies[name] = newCookies[name];
+      }
+    }
+  }, {
+    key: 'get',
+    value: function get(name) {
+      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+      this._updateBrowserValues();
+      return readCookie(this.cookies[name], options);
+    }
+  }, {
+    key: 'getAll',
+    value: function getAll() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      this._updateBrowserValues();
+      var result = {};
+
+      for (var name in this.cookies) {
+        result[name] = readCookie(this.cookies[name], options);
+      }
+
+      return result;
+    }
+  }, {
+    key: 'set',
+    value: function set(name, value, options) {
+      if ((typeof value === 'undefined' ? 'undefined' : _typeof(value)) === 'object') {
+        value = JSON.stringify(value);
+      }
+
+      if (this.hooks && this.hooks.onSet) {
+        this.hooks.onSet(name, value, options);
+      }
+
+      this.cookies[name] = value;
+
+      if (_utils.HAS_DOCUMENT_COOKIE) {
+        document.cookie = _cookie2.default.serialize(name, value, options);
+      }
+    }
+  }, {
+    key: 'remove',
+    value: function remove(name, options) {
+      var finalOptions = options = (0, _objectAssign2.default)({}, options, {
+        expires: new Date(1970, 1, 1, 0, 0, 1),
+        maxAge: 0
+      });
+
+      if (this.hooks && this.hooks.onRemove) {
+        this.hooks.onRemove(name, finalOptions);
+      }
+
+      delete this.cookies[name];
+
+      if (_utils.HAS_DOCUMENT_COOKIE) {
+        document.cookie = _cookie2.default.serialize(name, '', finalOptions);
+      }
+    }
+  }]);
+
+  return Cookies;
+}();
+
+exports.default = Cookies;
+
+
+function isParsingCookie(value, doNotParse) {
+  if (typeof doNotParse === 'undefined') {
+    // We guess if the cookie start with { or [, it has been serialized
+    doNotParse = !value || value[0] !== '{' && value[0] !== '[' && value[0] !== '"';
+  }
+
+  return !doNotParse;
+}
+
+function readCookie(value, options) {
+  if (isParsingCookie(value, options.doNotParse)) {
+    try {
+      return JSON.parse(value);
+    } catch (e) {
+      // At least we tried
+    }
+  }
+
+  return value;
+}
+module.exports = exports['default'];
+
+/***/ }),
+/* 320 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*!
+ * cookie
+ * Copyright(c) 2012-2014 Roman Shtylman
+ * Copyright(c) 2015 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+
+
+/**
+ * Module exports.
+ * @public
+ */
+
+exports.parse = parse;
+exports.serialize = serialize;
+
+/**
+ * Module variables.
+ * @private
+ */
+
+var decode = decodeURIComponent;
+var encode = encodeURIComponent;
+var pairSplitRegExp = /; */;
+
+/**
+ * RegExp to match field-content in RFC 7230 sec 3.2
+ *
+ * field-content = field-vchar [ 1*( SP / HTAB ) field-vchar ]
+ * field-vchar   = VCHAR / obs-text
+ * obs-text      = %x80-FF
+ */
+
+var fieldContentRegExp = /^[\u0009\u0020-\u007e\u0080-\u00ff]+$/;
+
+/**
+ * Parse a cookie header.
+ *
+ * Parse the given cookie header string into an object
+ * The object has the various cookies as keys(names) => values
+ *
+ * @param {string} str
+ * @param {object} [options]
+ * @return {object}
+ * @public
+ */
+
+function parse(str, options) {
+  if (typeof str !== 'string') {
+    throw new TypeError('argument str must be a string');
+  }
+
+  var obj = {}
+  var opt = options || {};
+  var pairs = str.split(pairSplitRegExp);
+  var dec = opt.decode || decode;
+
+  for (var i = 0; i < pairs.length; i++) {
+    var pair = pairs[i];
+    var eq_idx = pair.indexOf('=');
+
+    // skip things that don't look like key=value
+    if (eq_idx < 0) {
+      continue;
+    }
+
+    var key = pair.substr(0, eq_idx).trim()
+    var val = pair.substr(++eq_idx, pair.length).trim();
+
+    // quoted values
+    if ('"' == val[0]) {
+      val = val.slice(1, -1);
+    }
+
+    // only assign once
+    if (undefined == obj[key]) {
+      obj[key] = tryDecode(val, dec);
+    }
+  }
+
+  return obj;
+}
+
+/**
+ * Serialize data into a cookie header.
+ *
+ * Serialize the a name value pair into a cookie string suitable for
+ * http headers. An optional options object specified cookie parameters.
+ *
+ * serialize('foo', 'bar', { httpOnly: true })
+ *   => "foo=bar; httpOnly"
+ *
+ * @param {string} name
+ * @param {string} val
+ * @param {object} [options]
+ * @return {string}
+ * @public
+ */
+
+function serialize(name, val, options) {
+  var opt = options || {};
+  var enc = opt.encode || encode;
+
+  if (typeof enc !== 'function') {
+    throw new TypeError('option encode is invalid');
+  }
+
+  if (!fieldContentRegExp.test(name)) {
+    throw new TypeError('argument name is invalid');
+  }
+
+  var value = enc(val);
+
+  if (value && !fieldContentRegExp.test(value)) {
+    throw new TypeError('argument val is invalid');
+  }
+
+  var str = name + '=' + value;
+
+  if (null != opt.maxAge) {
+    var maxAge = opt.maxAge - 0;
+    if (isNaN(maxAge)) throw new Error('maxAge should be a Number');
+    str += '; Max-Age=' + Math.floor(maxAge);
+  }
+
+  if (opt.domain) {
+    if (!fieldContentRegExp.test(opt.domain)) {
+      throw new TypeError('option domain is invalid');
+    }
+
+    str += '; Domain=' + opt.domain;
+  }
+
+  if (opt.path) {
+    if (!fieldContentRegExp.test(opt.path)) {
+      throw new TypeError('option path is invalid');
+    }
+
+    str += '; Path=' + opt.path;
+  }
+
+  if (opt.expires) {
+    if (typeof opt.expires.toUTCString !== 'function') {
+      throw new TypeError('option expires is invalid');
+    }
+
+    str += '; Expires=' + opt.expires.toUTCString();
+  }
+
+  if (opt.httpOnly) {
+    str += '; HttpOnly';
+  }
+
+  if (opt.secure) {
+    str += '; Secure';
+  }
+
+  if (opt.sameSite) {
+    var sameSite = typeof opt.sameSite === 'string'
+      ? opt.sameSite.toLowerCase() : opt.sameSite;
+
+    switch (sameSite) {
+      case true:
+        str += '; SameSite=Strict';
+        break;
+      case 'lax':
+        str += '; SameSite=Lax';
+        break;
+      case 'strict':
+        str += '; SameSite=Strict';
+        break;
+      default:
+        throw new TypeError('option sameSite is invalid');
+    }
+  }
+
+  return str;
+}
+
+/**
+ * Try decoding a string using a decoding function.
+ *
+ * @param {string} str
+ * @param {function} decode
+ * @private
+ */
+
+function tryDecode(str, decode) {
+  try {
+    return decode(str);
+  } catch (e) {
+    return str;
+  }
+}
+
+
+/***/ }),
+/* 321 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.cleanCookies = cleanCookies;
+// Can we get/set cookies on document.cookie?
+var HAS_DOCUMENT_COOKIE = exports.HAS_DOCUMENT_COOKIE = (typeof document === 'undefined' ? 'undefined' : _typeof(document)) === 'object' && typeof document.cookie === 'string';
+
+function cleanCookies() {
+  document.cookie.split(';').forEach(function (c) {
+    document.cookie = c.replace(/^ +/, '').replace(/=.*/, '=;expires=' + new Date().toUTCString() + ';path=/');
+  });
 }
 
 /***/ })

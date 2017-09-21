@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
+import Cookies from 'universal-cookie';
+
 import * as actions from '../actions/actions';
 
 class Home extends Component {
@@ -14,13 +16,19 @@ class Home extends Component {
     if(this.props.elements.length === 0) {
       this.props.getAllElements();
     }
+
+    const cookies = new Cookies();
+    if(cookies.get('token')) {
+      this.props.markAsLoggedIn({
+        token: cookies.get('token'),
+        username: cookies.get('username'),
+      });
+    }
   }
 
   logOut() {
     this.props.logOut();
   }
-
-
 
   displayLoginButton(auth) {
     let result;
@@ -77,6 +85,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     addElement: actions.addElement,
     getAllElements: actions.getAllElements,
+    markAsLoggedIn: actions.markAsLoggedIn,
     logOut: actions.logOut,
   }, dispatch);
 }
